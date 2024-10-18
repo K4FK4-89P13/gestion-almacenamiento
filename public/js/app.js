@@ -1,4 +1,6 @@
 
+import { apiRequest } from "./modules/api";
+
 // Mostrar/Ocultar las opciones de edición y eliminación
 $(document).ready(function () {
     $('.dropdown-toggle').on('click', function () {
@@ -124,3 +126,18 @@ botones[1].addEventListener('click', () => {
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>${err}</div>`;
         })
 });
+
+
+/* Eliminar registros */
+const botonesEliminar = document.querySelectorAll('.eliminar');
+const modelos = document.getElementsByTagName('hidden');
+
+for (let i = 0; i < botonesEliminar.length; i++) {
+    botonesEliminar[i].addEventListener('click', (e) => {
+        const idCategoria = e.target.getAttribute('data-id');
+        if(confirm('¿Esta seguro de eliminar este registro?')) {
+            apiRequest(`http://product.test/Home/deshabilitar/${modelos[i]}`, 'POST', )
+        }
+    })
+    
+}

@@ -20,4 +20,14 @@ class Proveedor extends Model {
         }
         $stmt->close();
     }
+
+    public function deshabilitar($id) {
+        $sql = "UPDATE proveedor SET estado = 0 WHERE id_proveedor = ?";
+        $stmt = $this->db->prepare($sql);
+        if( $stmt->execute([$id]) ) {
+            return "Proveedor eliminada correctamente";
+        }else {
+            return "Error al eliminar la proveedor";
+        }
+    }
 }

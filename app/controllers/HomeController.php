@@ -2,10 +2,6 @@
 
 class HomeController extends Controller {
 
-    // public function __construct() {
-    //     $this->index();
-    // }
-
     public function index() {
         $categoriaModel = $this->load_model('Categoria');
         $categorias = $categoriaModel->getAllCategoria();
@@ -25,6 +21,10 @@ class HomeController extends Controller {
         $this->load_view('inicio', $data);
     }
 
+
+    /* 
+    ** Consulta de todos los registros
+    */
     public function show($modelo) {
         $modeloModel = $this->load_model(ucfirst($modelo));
         $metodoSelect = "getAll" . ucfirst(strtolower($modelo));
@@ -33,6 +33,10 @@ class HomeController extends Controller {
         echo json_encode($resultQuery);
     }
 
+
+    /* 
+    ** Insertar uevos registros 
+    */
     public function createCategoria() {
 
         //Obtiene los datos en formato JSON enviados por AJAX
@@ -48,7 +52,6 @@ class HomeController extends Controller {
             echo json_encode(['message' => 'Datos imcompletos']);
         }
     }
-
     public function createProveedor() {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
@@ -56,6 +59,36 @@ class HomeController extends Controller {
         if( isset($data['nameProveedor']) ) {
             $proveedorModel = $this->load_model('Proveedor');
             $resultado = $proveedorModel->guardarProveedor($data['nameProveedor']);
+            echo json_encode(['message' => $resultado]);
+        }else{
+            echo json_encode(['message' => 'Datos imcompletos']);
+        }
+    }
+
+
+    /* 
+    ** Deshabilitar registros
+    */
+    public function deshabilitarCategoria($id) {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        if( isset($data['id_categoria']) ) {
+            $categoriaModel = $this->load_model('Categoria');
+            $resultado = $categoriaModel->deshabilitar($data['id_categoria']);
+            echo json_encode(['message' => $resultado]);
+        }else{
+            echo json_encode(['message' => 'Datos imcompletos']);
+        }
+    }
+    public function deshabilitar($tabla) {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        $id_campo = "id_" . strtolower($tabla);
+        if( isset($data[$id_campo]) ) {
+            $tablaModel = $this->load_model( ucfirst($tabla) );
+            $resultado = $tablaModel->deshabilitar($data[$id_campo]);
             echo json_encode(['message' => $resultado]);
         }else{
             echo json_encode(['message' => 'Datos imcompletos']);

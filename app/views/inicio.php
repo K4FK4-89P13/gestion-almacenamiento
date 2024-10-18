@@ -33,7 +33,7 @@
             <tbody>
                 <?php foreach ($data['categorias'] as $categoria): ?>
                     <tr>
-                        <td><?= $categoria['id_categoria'] ?></td>
+                        <td class="id-campo"><?= $categoria['id_categoria'] ?></td>
                         <td><?= $categoria['nombre'] ?></td>
                         <td>
                             <div class="dropdown">
@@ -57,6 +57,7 @@
         <!-- Formulario oculto para agregar nueva categoría -->
         <div class="form-container" id="categoriaForm">
             <form id="categoriaForm">
+                <input type="hidden" name="categoria" value="categoria">
                 <div class="form-group">
                     <label for="nombre_categoria">Nombre de la Categoría:</label>
                     <input type="text" class="form-control" id="nombre_categoria" name="nombre_categoria" required>
@@ -81,7 +82,7 @@
         <tbody>
             <?php foreach ($data['proveedores'] as $proveedor): ?>
                 <tr>
-                    <td><?= $proveedor['id_proveedor'] ?></td>
+                    <td class="id-campo"><?= $proveedor['id_proveedor'] ?></td>
                     <td><?= $proveedor['nombre'] ?></td>
                     <td>
                         <div class="dropdown">
@@ -105,6 +106,7 @@
     <!-- Formulario oculto para agregar nuevo proveedor -->
     <div class="form-container" id="proveedorForm">
         <form>
+            <input type="hidden" name="proveedor" value="proveedor">
             <div class="form-group">
                 <label for="nombre_proveedor">Nombre del Proveedor:</label>
                 <input type="text" class="form-control" id="nombre_proveedor" name="nombre_proveedor" required>
@@ -132,7 +134,7 @@
         <tbody>
             <?php foreach ($data['productos'] as $producto): ?>
                 <tr>
-                    <td><?= $producto['id_producto'] ?></td>
+                    <td class="id-campo"><?= $producto['id_producto'] ?></td>
                     <td><?= $producto['nombre'] ?></td>
                     <td><?= $producto['categoria'] ?></td>
                     <td><?= $producto['proveedor'] ?></td>
@@ -158,7 +160,8 @@
 
     <!-- Formulario oculto para agregar nuevo producto -->
     <div class="form-container" id="productoForm">
-        <form action="ruta_guardar_producto.php" method="POST">
+        <form>
+            <input type="hidden" name="producto" value="producto">
             <div class="form-group">
                 <label for="nombre_producto">Nombre del Producto:</label>
                 <input type="text" class="form-control" id="nombre_producto" name="nombre_producto" required>
