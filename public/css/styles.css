@@ -1,0 +1,12 @@
+.dropdown-options {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1000;
+}
+.form-container {
+    display: none; /* Se oculta por defecto */
+    margin-top: 20px;
+}
