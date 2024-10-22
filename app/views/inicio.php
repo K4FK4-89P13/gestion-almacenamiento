@@ -22,7 +22,8 @@
     <!-- Categorías -->
     <div class="tab-pane fade show active" id="categorias" role="tabpanel">
         <h3>Categorías</h3>
-        <table class="table table-bordered table-hover" id="tabla_categorias">
+        <table class="table table-bordered table-hover" id="tabla_categoria">
+            
             <thead class="thead-dark">
                 <tr>
                     <th>ID</th>
@@ -33,16 +34,17 @@
             <tbody>
                 <?php foreach ($data['categorias'] as $categoria): ?>
                     <tr>
-                        <td class="id-campo"><?= $categoria['id_categoria'] ?></td>
+                        <td class="id-cell"><?= $categoria['id_categoria'] ?></td>
                         <td><?= $categoria['nombre'] ?></td>
                         <td>
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle='dropdown'>
                                     ⋮
                                 </button>
-                                <div class="dropdown-options">
-                                    <a href="#">Editar</a><br>
-                                    <a href="#">Eliminar</a>
+                                <div class="dropdown-menu">
+                                    <a href="" class="dropdown-item">Editar</a>
+                                    <a class="eliminar dropdown-item">Eliminar</a>
+                                    <input type="hidden" name="categoria" value="categoria" class="hidden">
                                 </div>
                             </div>
                         </td>
@@ -56,22 +58,22 @@
 
         <!-- Formulario oculto para agregar nueva categoría -->
         <div class="form-container" id="categoriaForm">
-            <form id="categoriaForm">
-                <input type="hidden" name="categoria" value="categoria">
+            <form id="categoria_Form">
                 <div class="form-group">
                     <label for="nombre_categoria">Nombre de la Categoría:</label>
                     <input type="text" class="form-control" id="nombre_categoria" name="nombre_categoria" required>
                 </div>
                 <button type="submit" class="btn btn-success guardar">Guardar</button>
             </form>
-        <div id="mensaje"></div>
-    </div>
+        </div>
+        <div id="mensaje_categoria"></div>
 </div>
 
 <!-- Proveedores -->
 <div class="tab-pane fade" id="proveedores" role="tabpanel">
     <h3>Proveedores</h3>
-    <table class="table table-bordered table-hover" id="tabla_proveedores">
+    <table class="table table-bordered table-hover" id="tabla_proveedor">
+        <input type="hidden" name="categoria" value="proveedor">
         <thead class="thead-dark">
             <tr>
                 <th>ID</th>
@@ -82,16 +84,17 @@
         <tbody>
             <?php foreach ($data['proveedores'] as $proveedor): ?>
                 <tr>
-                    <td class="id-campo"><?= $proveedor['id_proveedor'] ?></td>
+                    <td class="id-cell"><?= $proveedor['id_proveedor'] ?></td>
                     <td><?= $proveedor['nombre'] ?></td>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle='dropdown'>
                                 ⋮
                             </button>
-                            <div class="dropdown-options">
-                                <a href="#">Editar</a><br>
-                                <a href="#">Eliminar</a>
+                            <div class="dropdown-menu">
+                                <a href="" class="dropdown-item">Editar</a>
+                                <a class="eliminar dropdown-item">Eliminar</a>
+                                <input type="hidden" name="proveedor" value="proveedor" class="hidden">
                             </div>
                         </div>
                     </td>
@@ -113,14 +116,15 @@
             </div>
             <button type="submit" class="btn btn-success guardar">Guardar</button>
         </form>
-        <div id="mensaje_proveedor"></div>
     </div>
+    <div id="mensaje_proveedor"></div>
 </div>
 
 <!-- Productos -->
 <div class="tab-pane fade" id="productos" role="tabpanel">
     <h3>Productos</h3>
-    <table class="table table-bordered table-hover">
+    <table class="table table-bordered table-hover" id="tabla_producto">
+        <input type="hidden" name="categoria" value="producto">
         <thead class="thead-dark">
             <tr>
                 <th>ID</th>
@@ -134,19 +138,20 @@
         <tbody>
             <?php foreach ($data['productos'] as $producto): ?>
                 <tr>
-                    <td class="id-campo"><?= $producto['id_producto'] ?></td>
+                    <td class="id-cell"><?= $producto['id_producto'] ?></td>
                     <td><?= $producto['nombre'] ?></td>
                     <td><?= $producto['categoria'] ?></td>
                     <td><?= $producto['proveedor'] ?></td>
                     <td><?= $producto['cantidad'] ?></td>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle='dropdown'>
                                 ⋮
                             </button>
-                            <div class="dropdown-options">
-                                <a href="#">Editar</a><br>
-                                <a href="#">Eliminar</a>
+                            <div class="dropdown-menu">
+                                <a href="" class="dropdown-item">Editar</a>
+                                <a class="eliminar dropdown-item">Eliminar</a>
+                                <input type="hidden" name="producto" value="producto" class="hidden">
                             </div>
                         </div>
                     </td>
@@ -188,6 +193,7 @@
             </div>
             <button type="submit" class="btn btn-success guardar">Guardar</button>
         </form>
+        <div id="mensaje_producto"></div>
     </div>
 </div>
 

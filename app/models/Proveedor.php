@@ -3,7 +3,7 @@
 class Proveedor extends Model {
 
     public function getAllProveedor() {
-        $sql = "SELECT * FROM proveedor";
+        $sql = "SELECT id_proveedor, nombre FROM proveedor WHERE estado = 1";
         $stmt = $this->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -21,7 +21,7 @@ class Proveedor extends Model {
         $stmt->close();
     }
 
-    public function deshabilitar($id) {
+    public function eliminar($id) {
         $sql = "UPDATE proveedor SET estado = 0 WHERE id_proveedor = ?";
         $stmt = $this->db->prepare($sql);
         if( $stmt->execute([$id]) ) {

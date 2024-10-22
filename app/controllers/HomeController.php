@@ -35,7 +35,7 @@ class HomeController extends Controller {
 
 
     /* 
-    ** Insertar uevos registros 
+    ** Insertar nuevos registros 
     */
     public function createCategoria() {
 
@@ -44,54 +44,41 @@ class HomeController extends Controller {
         $data = json_decode($json, true);
 
         //Validacion si se recibio correctamente el dato
-        if ( isset($data['nameCategoria']) ) {
+        header('Content-Type: application/json');
+        if ( isset($data['nameValue']) ) {
             $categoriaModel = $this->load_model('Categoria');
-            $resultado = $categoriaModel->guardar($data['nameCategoria']);
+            $resultado = $categoriaModel->guardar($data['nameValue']);
             echo json_encode(['message' => $resultado]);
         }else{
-            echo json_encode(['message' => 'Datos imcompletos']);
+            echo json_encode(['message' => 'Datos incompletos']);
         }
     }
     public function createProveedor() {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
 
-        if( isset($data['nameProveedor']) ) {
+        header('Content-Type: application/json');
+        if( !empty($data['nameValue']) ) {
             $proveedorModel = $this->load_model('Proveedor');
-            $resultado = $proveedorModel->guardarProveedor($data['nameProveedor']);
+            $resultado = $proveedorModel->guardarProveedor($data['nameValue']);
             echo json_encode(['message' => $resultado]);
         }else{
-            echo json_encode(['message' => 'Datos imcompletos']);
+            echo json_encode(['message' => 'Datos incompletos']);
         }
     }
 
-
-    /* 
-    ** Deshabilitar registros
-    */
-    public function deshabilitarCategoria($id) {
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-
-        if( isset($data['id_categoria']) ) {
-            $categoriaModel = $this->load_model('Categoria');
-            $resultado = $categoriaModel->deshabilitar($data['id_categoria']);
-            echo json_encode(['message' => $resultado]);
-        }else{
-            echo json_encode(['message' => 'Datos imcompletos']);
-        }
-    }
     public function deshabilitar($tabla) {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
 
-        $id_campo = "id_" . strtolower($tabla);
-        if( isset($data[$id_campo]) ) {
+        header('Content-Type: application/json');
+        if( isset($data['id_campo']) ) {
             $tablaModel = $this->load_model( ucfirst($tabla) );
-            $resultado = $tablaModel->deshabilitar($data[$id_campo]);
+            $resultado = $tablaModel->eliminar($data['id_campo']);
             echo json_encode(['message' => $resultado]);
         }else{
             echo json_encode(['message' => 'Datos imcompletos']);
         }
     }
+
 }

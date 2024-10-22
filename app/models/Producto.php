@@ -6,14 +6,15 @@ class Producto extends Model {
         $sql = "SELECT producto.*, categoria.nombre AS categoria, proveedor.nombre AS proveedor 
                 FROM producto
                 JOIN categoria ON producto.fk_categoria = categoria.id_categoria
-                JOIN proveedor ON producto.fk_proveedor = proveedor.id_proveedor";
+                JOIN proveedor ON producto.fk_proveedor = proveedor.id_proveedor
+                WHERE producto.estado = 1";
         $stmt = $this->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Métodos adicionales para agregar, editar o eliminar productos
 
-    public function deshabilitar($id) {
+    public function eliminar($id) {
         $sql = "UPDATE producto SET estado = 0 WHERE id_producto = ?";
         $stmt = $this->db->prepare($sql);
         if( $stmt->execute([$id]) ) {

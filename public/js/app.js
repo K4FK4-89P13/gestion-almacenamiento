@@ -1,19 +1,7 @@
 
-import { apiRequest } from "./modules/api";
+import { apiRequest } from "./modules/api.js";
+import { domUpdates } from "./modules/domUpdates.js";
 
-// Mostrar/Ocultar las opciones de edición y eliminación
-$(document).ready(function () {
-    $('.dropdown-toggle').on('click', function () {
-        $(this).next('.dropdown-options').toggle();
-    });
-
-    // Ocultar el menú cuando se hace clic fuera de él
-    $(document).on('click', function (e) {
-        if (!$(e.target).closest('.dropdown').length) {
-            $('.dropdown-options').hide();
-        }
-    });
-});
 
 $(document).ready(function() {
     // Mostrar/ocultar el formulario al hacer clic en el botón
@@ -25,119 +13,90 @@ $(document).ready(function() {
 
 
 //Peticiones AJAX
-const botones = document.getElementsByClassName("guardar");
-const forms = document.getElementsByTagName('form');
-const dropdown = `<div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button">⋮</button>
-                    <div class="dropdown-options">
-                        <a href="#">Editar</a><br>
-                        <a href="#">Eliminar</a>
+const dropdown = `<div class='dropdown'>
+                    <button class='btn btn-secondary dropdown-toggle' type='button' data-bs-toggle='dropdown'>⋮</button>
+                    <div class='dropdown-menu'>
+                        <a href="" class='dropdown-item'>Editar</a>
+                        <a href="" class='eliminar dropdown-item'>Eliminar</a>
+                        <input type="hidden" name="producto" value="producto" class="hidden">
                     </div>
                 </div>`;
 
-function actualizarCategorias() {
-    fetch('http://product.test/Home/show/categoria')
-        .then(res => res.json())
-        .then(data => {
-            const tbody = document.getElementById('tabla_categorias').querySelector('tbody');
-            tbody.innerHTML = "";
 
-            data.forEach(categoria => {
+function actualizar(modelo) {
+    apiRequest(`http://product.test/Home/show/${modelo}`, 'GET')
+        .then(data => {
+            const tbody = document.getElementById(`tabla_${modelo}`).querySelector('tbody');
+            tbody.innerHTML = "";
+            const id_tabla = 'id_' + modelo;
+
+            data.forEach(item => {
                 let row = `<tr>
-                            <td>${categoria.id_categoria}</td>
-                            <td>${categoria.nombre}</td>
+                            <td class="id-cell">${item[id_tabla]}</td>
+                            <td>${item.nombre}</td>
                             <td>${dropdown}</td>
                             </tr>`;
                 tbody.innerHTML += row;
             });
+            asignarEventosEliminar(modelo);
         })
-        .catch(err => console.error("Error al obtener categorias", err));
-}
-function actualizarProveedores() {
-    fetch('http://product.test/Home/show/proveedor')
-        .then(res => res.json())
-        .then(data => {
-            const tbody = document.getElementById('tabla_proveedores').querySelector('tbody');
-            tbody.innerHTML = "";
-
-            data.forEach(proveedor => {
-                let row = `<tr>
-                            <td>${proveedor.id_proveedor}</td>
-                            <td>${proveedor.nombre}</td>
-                            <td>${dropdown}</td>
-                        </tr>`;
-                tbody.innerHTML += row;
-            });
-        })
-        .catch(err => console.error("Error al obtener proveedores", err));
+        .catch(err => console.error(`Error al obtener ${modelo}`, err));
 }
 
-// Evitar el envio predeterminado del formulario
-for (let i = 0; i < botones.length; i++) {
-    forms[i].addEventListener('submit', (e) => {e.preventDefault()});
-}
-
-botones[0].addEventListener("click", () => {
-
-    //Insertar datos a la tabla 'Categorias'
-    const nombre_categoria = document.getElementById('nombre_categoria').value;
-    let data = {
-        nameCategoria: nombre_categoria
-    }
-    fetch('http://product.test/Home/createCategoria', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-    })
-        .then( (res) => res.json() )
-        .then( (response) => {
-            console.log("Succes: ", response);
-            document.getElementById('mensaje').innerHTML = `<p class="alert alert-success">${response.message}</p>`;
-
-            actualizarCategorias();
-        })
-        .catch( (err) => {
-            console.error("Error: ", err);
-            document.getElementById('mensaje').innerHTML = `<p class="alert alert-danger">Error: ${err}</p>`;
-        });
-
-});
-
-botones[1].addEventListener('click', () => {
-    // Nuevos registros
-    const nombre_proveedor = document.getElementById('nombre_proveedor').value;
-    let data = { nameProveedor: nombre_proveedor };
-    fetch('http://product.test/Home/createProveedor', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-    })
-        .then( (res) => res.json() )
+function registrar(etiqueta, modelo) {
+    const modelo_firstMayus = modelo.charAt(0).toUpperCase() + modelo.slice(1);
+    const nombre_tabla = document.getElementById(`nombre_${modelo}`).value;
+    let data = { nameValue: nombre_tabla };
+    apiRequest(`http://product.test/Home/create${modelo_firstMayus}`, 'POST', data)
         .then( (response) => {
             console.log('Success: ', response);
-            document.getElementById('mensaje_proveedor').innerHTML = `<p class="alert alert-success alert-dismissible">
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>${response.message}</p>`;
+            domUpdates(etiqueta, response.message, 'success');
 
-            actualizarProveedores();
+            actualizar(modelo);
         })
         .catch( (err) => {
             console.error("Error: ", err);
-            document.getElementById('mensaje_proveedor').innerHTML = `<div class="alert alert-danger alert-dismissible">
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>${err}</div>`;
+            domUpdates(etiqueta, err, 'danger');
         })
-});
+}
+
+
+/* Nuevos Registros */
+const botones = document.querySelectorAll(".guardar");
+const forms = document.getElementsByTagName('form');
+for (let i = 0; i < botones.length; i++) {
+    forms[i].addEventListener('submit', (e) => {e.preventDefault()}); // Evitar el envio predeterminado del formulario
+}
+botones[0].addEventListener('click', () => registrar('mensaje_categoria', 'categoria'));
+botones[1].addEventListener('click', () => registrar('mensaje_proveedor', 'proveedor'));
+botones[2].addEventListener('click', () => registrar('mensaje_producto', 'producto'));
 
 
 /* Eliminar registros */
-const botonesEliminar = document.querySelectorAll('.eliminar');
-const modelos = document.getElementsByTagName('hidden');
+asignarEventosEliminar();
+function asignarEventosEliminar(modelo = null) {
+    const botonesEliminar = document.querySelectorAll('.eliminar');
+    const modelos = document.getElementsByClassName('hidden');
 
-for (let i = 0; i < botonesEliminar.length; i++) {
-    botonesEliminar[i].addEventListener('click', (e) => {
-        const idCategoria = e.target.getAttribute('data-id');
-        if(confirm('¿Esta seguro de eliminar este registro?')) {
-            apiRequest(`http://product.test/Home/deshabilitar/${modelos[i]}`, 'POST', )
-        }
-    })
-    
+    for (let i = 0; i < botonesEliminar.length; i++) {
+        botonesEliminar[i].addEventListener('click', (e) => {
+            const row = botonesEliminar[i].closest('tr');
+            const idCampo = row.querySelector('.id-cell').textContent.trim();
+            const data = { 'id_campo': idCampo };
+            const tablaUrl = modelo ? modelo : modelos[i].value;
+            
+            if(confirm('¿Esta seguro de eliminar este registro?')) {
+                apiRequest(`http://product.test/Home/deshabilitar/${tablaUrl}`, 'POST', data)
+                    .then( (res) => {
+                        console.log("Success: ", res);
+                        actualizar(tablaUrl);
+                        domUpdates(`mensaje_${modelos[i].value}`, res.message, 'success');
+                    })
+                    .catch( (err) => {
+                        console.error("Error: ", err);
+                        domUpdates(`mensaje_${modelos[i].value}`, err.message, 'danger');
+                    })
+            }
+        }); 
+    }
 }

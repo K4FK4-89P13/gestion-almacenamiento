@@ -2,7 +2,7 @@
 class Categoria extends Model {
 
     public function getAllCategoria() {
-        $sql = "SELECT * FROM categoria";
+        $sql = "SELECT id_categoria, nombre FROM categoria WHERE estado = 1";
         $stmt = $this->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -19,7 +19,7 @@ class Categoria extends Model {
         $stmt->close();
     }
 
-    public function deshabilitar($id) {
+    public function eliminar($id) {
         $sql = "UPDATE categoria SET estado = 0 WHERE id_categoria = ?";
         $stmt = $this->db->prepare($sql);
         if( $stmt->execute([$id]) ) {

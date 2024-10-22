@@ -1,8 +1,9 @@
 <IfModule mod_rewrite.c>
     Options -Multiviews
     RewriteEngine On
-    #RewriteBase /Sitio-web-VentaBoletos/public
+    #RewriteBase /gestion_almacenamiento/public
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
+    AddType application/javascript .js
 </IfModule>
