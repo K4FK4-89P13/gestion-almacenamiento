@@ -58,7 +58,7 @@
 
         <!-- Formulario oculto para agregar nueva categoría -->
         <div class="form-container" id="categoriaForm">
-            <form id="categoria_Form">
+            <form id="categoria_Form" class="form-table">
                 <div class="form-group">
                     <label for="nombre_categoria">Nombre de la Categoría:</label>
                     <input type="text" class="form-control" id="nombre_categoria" name="nombre_categoria" required>
@@ -108,7 +108,7 @@
 
     <!-- Formulario oculto para agregar nuevo proveedor -->
     <div class="form-container" id="proveedorForm">
-        <form>
+        <form class="form-table">
             <input type="hidden" name="proveedor" value="proveedor">
             <div class="form-group">
                 <label for="nombre_proveedor">Nombre del Proveedor:</label>
@@ -165,7 +165,7 @@
 
     <!-- Formulario oculto para agregar nuevo producto -->
     <div class="form-container" id="productoForm">
-        <form>
+        <form class="form-table">
             <input type="hidden" name="producto" value="producto">
             <div class="form-group">
                 <label for="nombre_producto">Nombre del Producto:</label>

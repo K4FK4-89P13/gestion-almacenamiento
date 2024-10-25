@@ -1,23 +1,47 @@
 
 import { apiRequest } from "./modules/api.js";
 import { domUpdates } from "./modules/domUpdates.js";
+import { domLogin } from "./modules/domLogin.js";
 
+domLogin();
 
-$(document).ready(function() {
-    // Mostrar/ocultar el formulario al hacer clic en el botón
-    $('.toggle-form').on('click', function() {
-        var targetForm = $(this).data('target');
-        $(targetForm).toggle();
+// Asegúrate de que el DOM esté completamente cargado
+document.addEventListener('DOMContentLoaded', () => {
+    // Selecciona todos los elementos con la clase 'toggle-form'
+    const toggleButtons = document.querySelectorAll('.toggle-form');
+
+    // Itera sobre los botones y asigna un evento 'click' a cada uno
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Obtén el formulario objetivo desde el atributo 'data-target'
+            const targetForm = document.querySelector(button.getAttribute('data-target'));
+
+            // Alterna la visibilidad del formulario
+            if (targetForm) {
+                targetForm.style.display = targetForm.style.display === 'none' ? 'block' : 'none';
+            }
+        });
     });
 });
+
+const botones = document.querySelectorAll(".guardar");
+const forms = document.querySelectorAll('.form-table');
+for (let i = 0; i < botones.length; i++) {
+    forms[i].addEventListener('submit', e => e.preventDefault()); // Evitar el envio predeterminado del formulario
+}
+if(botones[0]) botones[0].addEventListener('click', () => registrar('mensaje_categoria', 'categoria'));
+if(botones[1]) botones[1].addEventListener('click', () => registrar('mensaje_proveedor', 'proveedor'));
+if(botones[2]) botones[2].addEventListener('click', () => registrar('mensaje_producto', 'producto'));
+
+asignarEventosEliminar();
 
 
 //Peticiones AJAX
 const dropdown = `<div class='dropdown'>
                     <button class='btn btn-secondary dropdown-toggle' type='button' data-bs-toggle='dropdown'>⋮</button>
                     <div class='dropdown-menu'>
-                        <a href="" class='dropdown-item'>Editar</a>
-                        <a href="" class='eliminar dropdown-item'>Eliminar</a>
+                        <a class='dropdown-item'>Editar</a>
+                        <a class='eliminar dropdown-item'>Eliminar</a>
                         <input type="hidden" name="producto" value="producto" class="hidden">
                     </div>
                 </div>`;
@@ -62,18 +86,10 @@ function registrar(etiqueta, modelo) {
 
 
 /* Nuevos Registros */
-const botones = document.querySelectorAll(".guardar");
-const forms = document.getElementsByTagName('form');
-for (let i = 0; i < botones.length; i++) {
-    forms[i].addEventListener('submit', (e) => {e.preventDefault()}); // Evitar el envio predeterminado del formulario
-}
-botones[0].addEventListener('click', () => registrar('mensaje_categoria', 'categoria'));
-botones[1].addEventListener('click', () => registrar('mensaje_proveedor', 'proveedor'));
-botones[2].addEventListener('click', () => registrar('mensaje_producto', 'producto'));
+
 
 
 /* Eliminar registros */
-asignarEventosEliminar();
 function asignarEventosEliminar(modelo = null) {
     const botonesEliminar = document.querySelectorAll('.eliminar');
     const modelos = document.getElementsByClassName('hidden');

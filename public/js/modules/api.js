@@ -9,5 +9,5 @@ export function apiRequest(url, method, data = null) {
         options.body = JSON.stringify(data);
     };
 
-    return fetch(url, options).then(response => response.json())
+    return fetch(url, options).then(response => response.ok ? response.json() : Promise.reject(response))
 }

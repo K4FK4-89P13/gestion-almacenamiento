@@ -67,6 +67,10 @@ class HomeController extends Controller {
         }
     }
 
+    
+    /* 
+    ** Deshabilitar registros
+    */
     public function deshabilitar($tabla) {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
